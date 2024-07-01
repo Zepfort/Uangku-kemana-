@@ -2,10 +2,11 @@
     margin : 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: "Outfit", sans-serif;
 }
 
 html { 
-    font-family: "Outfit", sans-serif;
+
     font-optical-sizing: auto;
     font-weight: 400px;
     font-style: normal;   
@@ -17,21 +18,37 @@ body {
     background-position: center;
 }
 
+:root{
+    --card-radius : 1.5rem;
+    --color-icon :#e0e0e06f;
+    --color-button : #d9d9d9;
+    --color-back-button : white;
+    --color-placeholder : #d9d9dd;
+
+}
 header {
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: row;
     gap: 1rem;
-    padding: 6rem 0;
+    padding: 5rem 0;
 }
 
 button {
     cursor: pointer;
 }
 
+.hidden {
+    display: none !important;
+}
+
 .container {
     max-width: 40rem;
     margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 header h1{
@@ -45,12 +62,15 @@ header h1{
     gap: 1rem;
 }
 
+/*Budgets*/
+
 .budget__card {
     padding: 1rem;
-    border-radius: 1.5rem;
+    border-radius: var(--card-radius);
     background-color: #0f379ba8;
     color: white;
     cursor: pointer;
+    width: 100%;
 }
 
 .budget__name {
@@ -68,9 +88,74 @@ header h1{
     background-color: transparent;
     font-size: 3rem;
     font-weight: bold;
-    border: 2px dashed #d9d9d9;
-    color: #d9d9d9;
+    border: 2px dashed var(--color-placeholder);
+    color: var(--color-placeholder);
 }
+/*Budgets Detail*/
+
+#budget__details {
+    gap: 1rem;
+}
+
+#budget__details .budget__card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#budget__details .Icon{
+    padding: 1rem;
+    border: 1px solid var(--color-icon);
+    border-radius: 50%;
+    color: var(--color-icon);
+    aspect-ratio: 1/1;
+    width: 4rem;
+    height: 4rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#budget__details i{
+    font-size: 2rem;
+}
+
+.back__home{
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    background-color: var(--color-back-button);
+    border-color: 1px solid var(--color-placeholder);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transform: translateY(-2rem);
+    color: #4b4b4b ;
+}
+
+#budget__details .back__home .icon__back {
+    font-size: 1rem;
+}
+
+.add__spent__btn {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    border-radius: var(--card-radius);
+    border: 2px dashed var(--color-placeholder);
+    background-color: transparent;
+    color: var(--color-placeholder);
+
+}
+
+.add__spent__btn span {
+    font-size: 2rem;
+    font-weight: bold;
+}
+/*Responsive*/
 
 @media(max-width: 768px){
     .budgets {
