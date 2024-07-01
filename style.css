@@ -24,6 +24,7 @@ body {
     --color-button : #d9d9d9;
     --color-back-button : white;
     --color-placeholder : #d9d9dd;
+    --color-text-primary : #4b4b4b;
 
 }
 header {
@@ -129,7 +130,7 @@ header h1{
     align-items: center;
     gap: 0.5rem;
     transform: translateY(-2rem);
-    color: #4b4b4b ;
+    color: var(--color-text-primary) ;
 }
 
 #budget__details .back__home .icon__back {
@@ -155,6 +156,50 @@ header h1{
     font-size: 2rem;
     font-weight: bold;
 }
+
+.sort__spent{
+    display: flex;
+    justify-content: end;
+    width: 100%;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.sort__spent i {
+    font-size: 1rem !important;
+}
+
+.sort__spent select{
+    padding: 0.3rem 0.6rem;
+    border: 1px solid var(--color-placeholder);
+    appearance: none;
+    border-radius: 0.5rem;
+}
+
+.spent{
+    width: 100%;
+}
+
+.spent__item {
+    padding: 1rem;
+    background-color: transparent;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--color-placeholder);
+    color: var(--color-text-primary);
+}
+
+.spent__item h4 {
+    font-size: 1.25rem;
+}
+
+.spent__item__price {
+    font-size: 1.75rem;
+    font-weight: bold;
+}
+
+
 /*Responsive*/
 
 @media(max-width: 768px){
