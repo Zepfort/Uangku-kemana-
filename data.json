@@ -1,0 +1,41 @@
+[
+    {
+        "nama__budget" : "Makan & Minum",
+        "total" : 10000,
+        "pnegeluaran" : [
+            {
+                "nama__pengeluaran" : "Nasi Padang",
+                "tanggal" : "17-01-2024",
+                "jumlah"  : 12000
+            },
+            {
+                "nama__pengeluaran" : "Bakso",
+                "tanggal" : "17-01-2024",
+                "jumlah"  : 15000
+            }
+        ]
+    },
+    {
+        "nama__budget" : "Nongkrong",
+        "total" : 50000,
+        "pnegeluaran" : [
+            {
+                "nama__pengeluaran" : "Minuman",
+                "tanggal" : "17-01-2024",
+                "jumlah"  : 12000
+            },
+            {
+                "nama__pengeluaran" : "Ciki",
+                "tanggal" : "17-01-2024",
+                "jumlah"  : 15000
+            }
+        ]
+    },
+    {
+        "nama__budget" : "Lorem",
+        "total" : 50000,
+        "pnegeluaran" : [
+            
+        ]
+    }
+]

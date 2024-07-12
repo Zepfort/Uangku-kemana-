@@ -1,0 +1,10 @@
+List Budget 
+	- Nama budget
+	- Sisa budget (perhitungan pengeluaran - total budget) 
+	- Total budget
+
+List Pengeluaran 
+	- Nama pengeluaran 
+	- Tanggal pengeluaran
+	- Jumlah pengeluaran
+
