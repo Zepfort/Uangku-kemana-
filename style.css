@@ -228,6 +228,7 @@ header h1{
     }
     
 }
+
 .modal .card {
     background-color: rgb(255, 255, 255);
     width: 80%;
@@ -293,7 +294,52 @@ header h1{
     border: none;
     color: white;
 }
+/* notifikasi */
 
+.notification__wraper {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 20;
+}
+.notification {
+    background-color: rgba(255, 255, 255, 0.726);
+    backdrop-filter: blur
+    ;
+    width: fit-content;
+    margin: 0 auto;
+    margin-top: 1rem;
+    padding: .75rem 1rem;
+    border: 1px solid var(--color-text-secondary) ;
+    border-radius: 12px;
+    animation: slidedown .5s ease-in-out ;
+}
+
+.notification.out {
+    animation: fadeout .5s ease-in-out forwards;
+}
+
+/* animasi keluar masuk popup*/
+@keyframes fadeout {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+@keyframes slidedown {
+    from {
+        opacity: 0;
+        transform: translateY(-1rem);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    
+}
 /*Responsive*/
 
 @media(max-width: 768px){

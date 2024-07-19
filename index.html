@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=\, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Budgetku - App </title>
 
     <!--Font-->
@@ -18,6 +18,9 @@
 </head>
 
 <body>
+    <!--Notifikasi-->
+    <div id="notifications" class="notification__wraper"></div> 
+    <!--header-->
     <header class="container">
         <img src="img/bag.png" alt="icon bag">
         <h1>Budgetku</h1>
@@ -39,7 +42,7 @@
     <main id="budget__details"class="container ">
         <button  class="back__home">
             <i class="ph ph-caret-left icon__back"></i>
-            Halaman Utama
+            Halaman Utamao
         </button>
         <div class="budget__card">
             <div class="">
@@ -109,11 +112,11 @@
             </div>
             <form>
                 <label for="">Nama Budget</label>
-                <input name="nama__budget" type="text" />
+                <input required name="nama__budget" type="text" />
                 <label for="">Jumlah Budget</label>
                 <div class="input__money">
                     <span>Rp</span>
-                    <input name="total" type="number" />
+                    <input required name="total" type="number" />
                 </div>
                 <button>Simpan</button>
             </form>

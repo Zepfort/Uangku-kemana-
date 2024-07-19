@@ -8,6 +8,7 @@ const closeModalBudgetBtn = document.querySelector("#budget__form i");
 const addSpentBtn = document.querySelector(".add__spent__btn");
 const spentForm = document.getElementById("spent__form");
 const closeModalPengeluaranBtn = document.querySelector("#spent__form i");
+const notifications = document.getElementById("notifications");
 
 //click  Tombol Halaman Utama
 backHomeBtn.addEventListener("click", () => {
@@ -74,15 +75,35 @@ document.querySelector("#budget__form form").addEventListener ("submit", (e) =>{
     
     const data =  getFormValue(new FormData(e.target));
 
+    console.log(data);
+
     saveDataBudget(data);
     closeModalBudget();
     resetInput();
-
-
+    showNotification(`✅ Budget ${data.nama__budget} berhasil disimpan!`)
+   
 });
 
 function resetInput(){
     document.querySelectorAll("form input").forEach((input) =>{
         input.value = "";
     })
+}
+
+/*notification pppup*/
+
+function showNotification(message) {
+    const newNotification = document.createElement("div");
+    newNotification.innerHTML = message;
+    newNotification.classList.add("notification");
+
+    notifications.appendChild(newNotification);
+    setTimeout (() => {
+        newNotification.classList.add("out");
+
+        setTimeout(() => {
+
+            notifications.removeChild(newNotification)
+        }, 500);
+    }, 4000);
 }
