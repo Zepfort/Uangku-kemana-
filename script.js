@@ -1,8 +1,7 @@
 const backHomeBtn = document.querySelector("#budget__details button.back__home");
-const budgetPage = document.getElementById("budgets");
+const budgetsPage = document.getElementById("budgets");
+renderBudgets();
 const budgetDetailsPage = document.querySelector("#budget__details");
-const budgetCards = document.querySelectorAll("#budgets .budget__card");
-const addBudgetButton = document.querySelector("#budgets button");
 const budgetForm = document.getElementById("budget__form");
 const closeModalBudgetBtn = document.querySelector("#budget__form i");
 const addSpentBtn = document.querySelector(".add__spent__btn");
@@ -10,26 +9,46 @@ const spentForm = document.getElementById("spent__form");
 const closeModalPengeluaranBtn = document.querySelector("#spent__form i");
 const notifications = document.getElementById("notifications");
 
+function selectBudgetCardsAndButton (){
+    const budgetCards = document.querySelectorAll("#budgets .budget__card");
+    const addBudgetButton = document.querySelector("#budgets button");
+
+    budgetCards = document.querySelectorAll("#budgets .budget__card");
+    addBudgetButton = document.querySelector("#budgets button");
+
+    //event listener click budget card
+    budgetCards.forEach((Card) => {
+        Card.addEventListener("click", () => {
+            budgetsPage.classList.add("hidden");
+            budgetDetailsPage.classList.remove("hidden");
+        });
+    });
+    //event listener click Tambah Budget
+    addBudgetButton.addEventListener("click", () =>{
+        budgetForm.classList.remove("hidden");
+    });
+}
+function renderBudgets() {
+    const budgetData = getExistingData();
+    const budgetList = budgetData.map((budget) => {
+        return `<div class="budget__card">
+                <h2 class="budget__name"> ${budget.nama__budget}</h2>
+                <p class="budget__amount">Rp ${budget.total}</p>
+                <p class="budget__total">Total Rp ${budget.total}</p>
+            </div>`
+    }).concat(`<button class="add__budget__btn">+</button>`)
+    .join("");
+    budgetsPage.innerHTML = budgetList;
+    selectBudgetCardsAndButton();
+}
+    
+
 //click  Tombol Halaman Utama
 backHomeBtn.addEventListener("click", () => {
     budgetDetailsPage.classList.add("hidden");
-    budgetPage.classList.remove("hidden");
+    budgetsPage.classList.remove("hidden");
 });
 
-//click budget card
-budgetCards.forEach((Card) => {
-    Card.addEventListener("click", () => {
-        budgetPage.classList.add("hidden");
-        budgetDetailsPage.classList.remove("hidden");
-    });
-});
-
-//click Tambah Budget
-addBudgetButton.addEventListener("click", () =>{
-    budgetForm.classList.remove("hidden");
-});
-
-//
 closeModalBudgetBtn.addEventListener("click", () =>{
     closeModalBudget();
 });
@@ -80,7 +99,8 @@ document.querySelector("#budget__form form").addEventListener ("submit", (e) =>{
     saveDataBudget(data);
     closeModalBudget();
     resetInput();
-    showNotification(`✅ Budget ${data.nama__budget} berhasil disimpan!`)
+    showNotification(`✅ Budget ${data.nama__budget} berhasil disimpan!`);
+    renderBudgets();
    
 });
 
