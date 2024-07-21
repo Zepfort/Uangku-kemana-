@@ -10,8 +10,8 @@ const closeModalPengeluaranBtn = document.querySelector("#spent__form i");
 const notifications = document.getElementById("notifications");
 
 function selectBudgetCardsAndButton (){
-    const budgetCards = document.querySelectorAll("#budgets .budget__card");
-    const addBudgetButton = document.querySelector("#budgets button");
+    let budgetCards = document.querySelectorAll("#budgets .budget__card");
+    let addBudgetButton = document.querySelector("#budgets button");
 
     budgetCards = document.querySelectorAll("#budgets .budget__card");
     addBudgetButton = document.querySelector("#budgets button");
@@ -19,6 +19,8 @@ function selectBudgetCardsAndButton (){
     //event listener click budget card
     budgetCards.forEach((Card) => {
         Card.addEventListener("click", () => {
+            const budgetId = Card.getAttribute("data-budgetid");
+            renderBudgetDetail(budgetId);
             budgetsPage.classList.add("hidden");
             budgetDetailsPage.classList.remove("hidden");
         });
@@ -28,10 +30,21 @@ function selectBudgetCardsAndButton (){
         budgetForm.classList.remove("hidden");
     });
 }
+
+//render ID budget
+function renderBudgetDetail(budgetId) {
+        const budgets = getExistingData();
+        const currentBudget = budgets.filter((budget) => budget.id == budgetId)[0];
+
+        document.querySelector("#budget__details .budget__card h2").innerText = currentBudget.nama__budget;
+        document.querySelector("#budget__details .budget__card .budget__amount").innerText = "Rp " +currentBudget.total;
+        document.querySelector("#budget__details .budget__card .budget__total").innerText = "Rp " +currentBudget.total;       
+}
+
 function renderBudgets() {
     const budgetData = getExistingData();
     const budgetList = budgetData.map((budget) => {
-        return `<div class="budget__card">
+        return `<div class="budget__card" data-budgetId="${budget.id}">
                 <h2 class="budget__name"> ${budget.nama__budget}</h2>
                 <p class="budget__amount">Rp ${budget.total}</p>
                 <p class="budget__total">Total Rp ${budget.total}</p>
@@ -94,9 +107,13 @@ document.querySelector("#budget__form form").addEventListener ("submit", (e) =>{
     
     const data =  getFormValue(new FormData(e.target));
 
-    console.log(data);
+    const dataWithId = {
+        id: generateId(),
+        ...data,
+    }
 
-    saveDataBudget(data);
+
+    saveDataBudget(dataWithId);
     closeModalBudget();
     resetInput();
     showNotification(`✅ Budget ${data.nama__budget} berhasil disimpan!`);
@@ -104,13 +121,19 @@ document.querySelector("#budget__form form").addEventListener ("submit", (e) =>{
    
 });
 
+function generateId() {
+    return new Date().getTime();
+}
+
+//console.log(generateId())
+
 function resetInput(){
     document.querySelectorAll("form input").forEach((input) =>{
         input.value = "";
     })
 }
 
-/*notification pppup*/
+/*notification pop up*/
 
 function showNotification(message) {
     const newNotification = document.createElement("div");
