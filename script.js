@@ -33,8 +33,11 @@ function selectBudgetCardsAndButton (){
 
 //render ID budget
 function renderBudgetDetail(budgetId) {
-        const budgets = getExistingData();
-        const currentBudget = budgets.filter((budget) => budget.id == budgetId)[0];
+        const currentBudget = getBudgetById(budgetId);
+
+        document
+        .querySelector("#budget__details .budget__card")
+        .setAttribute("data-budgetid", budgetId);
 
         document.querySelector("#budget__details .budget__card h2").innerText = currentBudget.nama__budget;
         document.querySelector("#budget__details .budget__card .budget__amount").innerText = "Rp " +currentBudget.total;
@@ -55,7 +58,6 @@ function renderBudgets() {
     selectBudgetCardsAndButton();
 }
     
-
 //click  Tombol Halaman Utama
 backHomeBtn.addEventListener("click", () => {
     budgetDetailsPage.classList.add("hidden");
@@ -75,8 +77,12 @@ addSpentBtn.addEventListener("click", ()=> {
 });
 
 closeModalPengeluaranBtn.addEventListener("click", ()=> {
-    spentForm.classList.add("hidden")
+    closeModalPengeluaran()
 });
+
+function closeModalPengeluaran() {
+    spentForm.classList.add("hidden")
+}
 
 function getFormValue(formData) {
     let result = new Object();
@@ -101,6 +107,12 @@ function saveDataBudget(dataBaru) {
     localStorage.setItem("budgets",JSON.stringify(existingData));
 }
 
+function getBudgetById(id) {
+    const budgets = getExistingData();
+
+    return budgets.filter((budget) => budget.id == id)[0];
+}
+
 // submit form budget
 document.querySelector("#budget__form form").addEventListener ("submit", (e) =>{
     e.preventDefault();
@@ -112,14 +124,47 @@ document.querySelector("#budget__form form").addEventListener ("submit", (e) =>{
         ...data,
     }
 
-
     saveDataBudget(dataWithId);
     closeModalBudget();
     resetInput();
     showNotification(`✅ Budget ${data.nama__budget} berhasil disimpan!`);
     renderBudgets();
-   
 });
+
+//submit pengeluaran 
+document.querySelector("#spent__form form").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const data = getFormValue(new FormData(e.target));
+
+    addPengeluaran(data);
+    closeModalPengeluaran();
+    resetInput();
+    showNotification(`✅ Pengeluaran ${data.nama__pengeluaran} berhasil ditambahkan`);
+});
+
+function addPengeluaran(data) {
+    const budgetId = document
+    .querySelector("#budget__details .budget__card")
+    .getAttribute("data-budgetid");
+
+    const currentBudget = getBudgetById(budgetId);
+
+    const currentSpent = currentBudget.pengeluaran ?? [];
+
+    const budgetWithSpent = {...currentBudget, pengeluaran: [...currentSpent, data] }
+
+    const allBudgets = getExistingData();
+
+    const updateBudgets = allBudgets.map((budget) => {
+        if(budget.id == budgetId){
+            return budgetWithSpent;
+        } else {
+            return budget;
+        }
+    })
+    localStorage.setItem("budgets", JSON.stringify(updateBudgets));
+}
+
 
 function generateId() {
     return new Date().getTime();
@@ -143,9 +188,7 @@ function showNotification(message) {
     notifications.appendChild(newNotification);
     setTimeout (() => {
         newNotification.classList.add("out");
-
         setTimeout(() => {
-
             notifications.removeChild(newNotification)
         }, 500);
     }, 4000);
