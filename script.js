@@ -20,7 +20,9 @@ function selectBudgetCardsAndButton (){
     budgetCards.forEach((Card) => {
         Card.addEventListener("click", () => {
             const budgetId = Card.getAttribute("data-budgetid");
+
             renderBudgetDetail(budgetId);
+            renderPengeluaran(budgetId);
             budgetsPage.classList.add("hidden");
             budgetDetailsPage.classList.remove("hidden");
         });
@@ -29,6 +31,26 @@ function selectBudgetCardsAndButton (){
     addBudgetButton.addEventListener("click", () =>{
         budgetForm.classList.remove("hidden");
     });
+}
+
+// render pengeluaran
+function renderPengeluaran(budgetId){
+    const {pengeluaran} = getBudgetById(budgetId);
+
+    const listPengeluaran = pengeluaran.map((item) =>{
+        return `<div class="spent__item">
+                <div class="spent__item__description">
+                    <h4>${item.nama__pengeluaran}</h4>
+                    <p>${item.tanggal}</p>
+                </div>
+                <div class="spent__item__price">
+                    <p>${item.jumlah}</p>
+                </div>                
+            </div>`
+    })
+    .join("");
+
+    document.querySelector("#budget__details .spent").innerHTML = listPengeluaran;
 }
 
 //render ID budget
@@ -125,7 +147,7 @@ document.querySelector("#budget__form form").addEventListener ("submit", (e) =>{
     }
 
     saveDataBudget(dataWithId);
-    closeModalBudget();
+    closeModalBudget();k
     resetInput();
     showNotification(`✅ Budget ${data.nama__budget} berhasil disimpan!`);
     renderBudgets();
@@ -134,12 +156,14 @@ document.querySelector("#budget__form form").addEventListener ("submit", (e) =>{
 //submit pengeluaran 
 document.querySelector("#spent__form form").addEventListener("submit", (e) => {
     e.preventDefault();
+    const budgetId = document.querySelector("#budget__details .budget__card").getAttribute("data-budgetid");
     const data = getFormValue(new FormData(e.target));
 
     addPengeluaran(data);
     closeModalPengeluaran();
     resetInput();
     showNotification(`✅ Pengeluaran ${data.nama__pengeluaran} berhasil ditambahkan`);
+    renderPengeluaran(budgetId);
 });
 
 function addPengeluaran(data) {
