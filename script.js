@@ -37,6 +37,7 @@ function selectBudgetCardsAndButton (){
 function renderPengeluaran(budgetId){
     const {pengeluaran} = getBudgetById(budgetId);
 
+    
     const listPengeluaran = pengeluaran.map((item) =>{
         return `<div class="spent__item">
                 <div class="spent__item__description">
@@ -57,21 +58,25 @@ function renderPengeluaran(budgetId){
 function renderBudgetDetail(budgetId) {
         const currentBudget = getBudgetById(budgetId);
 
+        const sisaBudget = hitungSisaBudget(currentBudget);
+
         document
         .querySelector("#budget__details .budget__card")
         .setAttribute("data-budgetid", budgetId);
 
         document.querySelector("#budget__details .budget__card h2").innerText = currentBudget.nama__budget;
-        document.querySelector("#budget__details .budget__card .budget__amount").innerText = "Rp " +currentBudget.total;
+        document.querySelector("#budget__details .budget__card .budget__amount").innerText = "Rp " +sisaBudget;
         document.querySelector("#budget__details .budget__card .budget__total").innerText = "Rp " +currentBudget.total;       
 }
 
 function renderBudgets() {
     const budgetData = getExistingData();
     const budgetList = budgetData.map((budget) => {
+        const sisaBudget = hitungSisaBudget(budget);
+
         return `<div class="budget__card" data-budgetId="${budget.id}">
                 <h2 class="budget__name"> ${budget.nama__budget}</h2>
-                <p class="budget__amount">Rp ${budget.total}</p>
+                <p class="budget__amount">Rp ${sisaBudget}</p>
                 <p class="budget__total">Total Rp ${budget.total}</p>
             </div>`
     }).concat(`<button class="add__budget__btn">+</button>`)
@@ -156,6 +161,7 @@ document.querySelector("#budget__form form").addEventListener ("submit", (e) =>{
 //submit pengeluaran 
 document.querySelector("#spent__form form").addEventListener("submit", (e) => {
     e.preventDefault();
+    //budgetid
     const budgetId = document.querySelector("#budget__details .budget__card").getAttribute("data-budgetid");
     const data = getFormValue(new FormData(e.target));
 
@@ -202,7 +208,7 @@ function resetInput(){
     })
 }
 
-/*notification pop up*/
+//notification pop up
 
 function showNotification(message) {
     const newNotification = document.createElement("div");
@@ -216,4 +222,11 @@ function showNotification(message) {
             notifications.removeChild(newNotification)
         }, 500);
     }, 4000);
+}
+
+// Kalkulasi sisa budget 
+function hitungSisaBudget (databudget) {
+    const totalPengeluaran = databudget.pengeluaran?.map((item) => +item.jumlah).reduce((jumlah, total) => jumlah + total);
+
+    return +databudget.total - totalPengeluaran;
 }
