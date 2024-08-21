@@ -35,17 +35,17 @@ function selectBudgetCardsAndButton (){
 
 // render pengeluaran
 function renderPengeluaran(budgetId){
-    const {pengeluaran} = getBudgetById(budgetId);
+    const {pengeluaran = []} = getBudgetById(budgetId);
 
-    
-    const listPengeluaran = pengeluaran.map((item) =>{
+    const listPengeluaran = pengeluaran
+    .map((item) =>{
         return `<div class="spent__item">
                 <div class="spent__item__description">
                     <h4>${item.nama__pengeluaran}</h4>
                     <p>${item.tanggal}</p>
                 </div>
                 <div class="spent__item__price">
-                    <p>${item.jumlah}</p>
+                    <p>${formatRupiah(item.jumlah)}</p>
                 </div>                
             </div>`
     })
@@ -55,6 +55,24 @@ function renderPengeluaran(budgetId){
 }
 
 //render ID budget
+function renderBudgets() {
+    const budgetData = getExistingData();
+    const budgetList = budgetData.map((budget) => {
+        const sisaBudget = hitungSisaBudget(budget);
+
+        console.log("Format: ", formatRupiah(sisaBudget))
+
+        return `<div class="budget__card" data-budgetId="${budget.id}">
+                <h2 class="budget__name"> ${budget.nama__budget}</h2>
+                <p class="budget__amount"> ${formatRupiah(sisaBudget)}</p>
+                <p class="budget__total">Total Rp ${formatRupiah(budget.total)}</p>
+            </div>`
+    }).concat(`<button class="add__budget__btn">+</button>`)
+    .join("");
+    budgetsPage.innerHTML = budgetList;
+    selectBudgetCardsAndButton();
+}
+
 function renderBudgetDetail(budgetId) {
         const currentBudget = getBudgetById(budgetId);
 
@@ -65,24 +83,8 @@ function renderBudgetDetail(budgetId) {
         .setAttribute("data-budgetid", budgetId);
 
         document.querySelector("#budget__details .budget__card h2").innerText = currentBudget.nama__budget;
-        document.querySelector("#budget__details .budget__card .budget__amount").innerText = "Rp " +sisaBudget;
-        document.querySelector("#budget__details .budget__card .budget__total").innerText = "Rp " +currentBudget.total;       
-}
-
-function renderBudgets() {
-    const budgetData = getExistingData();
-    const budgetList = budgetData.map((budget) => {
-        const sisaBudget = hitungSisaBudget(budget);
-
-        return `<div class="budget__card" data-budgetId="${budget.id}">
-                <h2 class="budget__name"> ${budget.nama__budget}</h2>
-                <p class="budget__amount">Rp ${sisaBudget}</p>
-                <p class="budget__total">Total Rp ${budget.total}</p>
-            </div>`
-    }).concat(`<button class="add__budget__btn">+</button>`)
-    .join("");
-    budgetsPage.innerHTML = budgetList;
-    selectBudgetCardsAndButton();
+        document.querySelector("#budget__details .budget__card .budget__amount").innerText = formatRupiah(sisaBudget);
+        document.querySelector("#budget__details .budget__card .budget__total").innerText = formatRupiah(currentBudget.total);       
 }
     
 //click  Tombol Halaman Utama
@@ -152,7 +154,7 @@ document.querySelector("#budget__form form").addEventListener ("submit", (e) =>{
     }
 
     saveDataBudget(dataWithId);
-    closeModalBudget();k
+    closeModalBudget();
     resetInput();
     showNotification(`✅ Budget ${data.nama__budget} berhasil disimpan!`);
     renderBudgets();
@@ -225,8 +227,18 @@ function showNotification(message) {
 }
 
 // Kalkulasi sisa budget 
-function hitungSisaBudget (databudget) {
-    const totalPengeluaran = databudget.pengeluaran?.map((item) => +item.jumlah).reduce((jumlah, total) => jumlah + total);
+function hitungSisaBudget(databudget) {
+    const totalPengeluaran = databudget.pengeluaran?.map((item) => +item.jumlah)
+        .reduce((total, jumlah) => total + jumlah, 0);  // Tambahkan 0 sebagai initial value
 
-    return +databudget.total - totalPengeluaran;
+    return +databudget.total - (totalPengeluaran || 0); // Pastikan totalPengeluaran tidak undefined
+}
+
+function formatRupiah (angka) {
+    return "format : ", 
+        new Intl.NumberFormat('id-ID', { 
+        style: "currency",
+        currency: "IDR",
+        maximumFractionDigits : 0,
+        }).format(angka);
 }
